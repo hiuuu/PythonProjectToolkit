@@ -19,7 +19,37 @@ logging.basicConfig(
 )
 
 class ProjectSummerizer:
-    """Main analysis engine with enhanced path handling and error checking"""
+    """
+    ProjectSummerizer is a class designed to analyze and summarize the structure and documentation of a Python project.
+    Attributes:
+        root_dir (Path): The root directory of the project to be analyzed.
+        output_dir (Path): The directory where the analysis output will be stored.
+        ignore_patterns (list): A list of patterns to ignore during the analysis.
+        backup_dir (Path): The directory where backup files will be stored.
+    Methods:
+        __init__(root_dir: Path, output_dir: Path):
+            Initializes the ProjectSummerizer with the specified root and output directories.
+        load_gitignore_patterns(addons=None):
+            Loads and processes .gitignore patterns, including additional patterns if provided.
+        _convert_pattern_to_regex(pattern: str) -> str:
+            Converts .gitignore patterns to regular expressions with proper escaping.
+        generate_summary(summary_file: Path, undocumented_file: Path):
+            Main analysis workflow that generates a summary and undocumented elements file.
+        _write_file_headers(summary_file, undocumented_file):
+            Writes standardized headers to the output files.
+        _generate_structure(output_handle):
+            Generates a visualization of the project directory structure.
+        _tree_walk(current_dir: Path, handle, prefix: str):
+            Recursively generates the directory tree structure.
+        _analyze_code(summary_handle, undocumented_handle):
+            Analyzes Python files in the project using AST parsing.
+        _process_file(module, file_path, summary_handle, undocumented_handle):
+            Processes individual Python files to extract and document code elements.
+        _handle_code_element(node, rel_path, summary_handle, undocumented_handle):
+            Handles class and function definitions, checking for and documenting docstrings.
+        _update_gitignore():
+            Updates the .gitignore file with entries related to the analysis outputs.
+        """
     
     def __init__(self, root_dir: Path, output_dir: Path):
         self.root_dir = root_dir.resolve()
@@ -198,7 +228,18 @@ Example:
                 f.write("\n" + "\n".join(entries))
 
 def configure_cli():
-    """Set up command line interface with argparse"""
+    """
+    Configures the command-line interface (CLI) for the Python Project Analysis Toolkit.
+    Returns:
+        argparse.Namespace: Parsed command-line arguments.
+    Command-line arguments:
+        project_root (Path, optional): Path to the project root directory. Defaults to the current working directory.
+        -o, --output-dir (Path, optional): Output directory for analysis files. Defaults to the current working directory.
+        --summary-file (Path, optional): Custom filename for the project summary.
+        --undocumented-file (Path, optional): Custom filename for undocumented elements.
+        --no-gitignore (bool, optional): Disable .gitignore updates.
+        -v, --verbose (bool, optional): Enable verbose logging.
+    """
     parser = argparse.ArgumentParser(
         description="Python Project Analysis Toolkit",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
@@ -241,7 +282,18 @@ def configure_cli():
     return parser.parse_args()
 
 def main():
-    """Main CLI execution flow"""
+    """
+    Main function to run the project summarizer.
+    This function configures the command-line interface (CLI), sets the logging level based on the verbosity argument,
+    and initializes the ProjectSummerizer to generate a summary of the project and identify undocumented code.
+    It also handles updating the .gitignore file if required.
+    Args:
+        None
+    Returns:
+        None
+    Raises:
+        SystemExit: If an exception occurs during the analysis, the program exits with a status code of 1.
+    """
     args = configure_cli()
     
     if args.verbose:
