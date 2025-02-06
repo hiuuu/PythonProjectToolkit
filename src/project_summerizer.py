@@ -74,22 +74,45 @@ class ProjectSummerizer:
 
     def _write_file_headers(self, summary_file, undocumented_file):
         """Write standardized headers to output files"""
+        analysis_prompt = """**AI Analysis Prompt (Copy-Paste Ready):**
+        
+Analyze this project structure focusing on:
+1. Architecture efficiency
+2. Code quality metrics
+3. Performance bottlenecks
+4. Scalability potential
+
+Provide recommendations in this format:
+- [High/Medium/Low Impact] [Category] Concise Suggestion (Cost-Benefit Rationale)
+
+Constraints:
+- Max 10 key suggestions
+- Technical specificity
+- Minimal resource prioritization
+- No verbose explanations
+
+Example:
+- [High] [Arch] Extract shared utils to module (Reduce 40% code duplication)
+- [Medium] [Perf] Cache DB queries in user/auth routes (Save ~200ms/request)
+    """
+
         headers = {
             summary_file: [
-                "=== Project Summary and Analysis Instructions ===",
+                "=== Project Summary and AI Analysis Guide ===",
                 f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
                 f"Project Root: {self.root_dir}",
+                "\n" + analysis_prompt + "\n",
                 "\nProject Structure:\n"
             ],
             undocumented_file: [
                 "=== Undocumented Code Elements ===",
-                "Use the following format for documentation generation:",
+                "Use this format for documentation generation:",
                 "File: <relative_path> | Element: <type> | Name: <name>"
             ]
         }
         
         for file, lines in headers.items():
-            file.write("\n".join(lines) + "\n\n")
+            file.write("\n".join(lines) + "\n\n")            
 
     def _generate_structure(self, output_handle):
         """Generate directory structure visualization"""

@@ -16,3 +16,7 @@ env/
 venv/
 
 output/
+# Project analysis outputs
+project_summary_*.txt
+undocumented_code_*.txt
+backups/
