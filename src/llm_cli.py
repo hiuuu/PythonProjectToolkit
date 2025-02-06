@@ -50,43 +50,12 @@ def comunicate_with_llm_cached(prompt: str, **kwargs) -> str:
         - The cache is implemented using a dictionary stored in the function's cache_info attribute.
         - The cache_info attribute must be initialized with a 'hits' dictionary before using this function.
     """
-    cache_key = hashlib.md5(prompt.encode('utf-8')).hexdigest()
+    # Generate unique key for kwargs to support caching
+    kwargs_key = hashlib.md5(str(sorted(kwargs.items())).encode('utf-8')).hexdigest()
+    cache_key = hashlib.md5(prompt.encode('utf-8')).hexdigest() + kwargs_key    
     logging.debug(f"Cache key: {cache_key}")
-    
-    # Check cache first
-    if cache_key in comunicate_with_llm_cached.cache_info().hits:
-        logging.info("Returning cached response")
-        return comunicate_with_llm_cached.cache_info().hits[cache_key]
-    
-    # Proceed with API call if not in cache
-    headers = {
-        "Authorization": f"Bearer {kwargs.get('api_key', API_KEY)}",
-        "Content-Type": "application/json"
-    }
-    
-    data = {
-        "model": kwargs.get('model', "meta-llama/llama-3.2-1b-instruct:free"),
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature": kwargs.get('temperature', 1),
-        "max_tokens": kwargs.get('max_tokens', 1024)
-    }
-
-    try:
-        response = requests.post(
-            kwargs.get('api_url', API_URL),
-            headers=headers,
-            json=data,
-            timeout=kwargs.get('timeout', 30)
-        )
-        response.raise_for_status()
-        result = response.json()['choices'][0]['message']['content'].strip()
-        
-        # Cache the result
-        comunicate_with_llm_cached.cache_info().hits[cache_key] = result
-        return result
-    except requests.exceptions.RequestException as e:
-        logging.error(f"API Request failed: {str(e)}")
-        return None    
+      
+    return comunicate_with_llm(prompt, **kwargs)
 
 def comunicate_with_llm(prompt, **kwargs):
     """
