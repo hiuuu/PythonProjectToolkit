@@ -9,8 +9,7 @@ import re
 import sys
 from datetime import datetime
 from pathlib import Path
-import fnmatch
-import shutil
+
 
 # Configure logging
 logging.basicConfig(
