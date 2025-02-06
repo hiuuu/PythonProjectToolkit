@@ -4,7 +4,15 @@ import os
 import subprocess
 import sys
 from pathlib import Path
+import logging
 import yaml  # Requires PyYAML: pip install pyyaml
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[logging.StreamHandler(sys.stdout)]
+)
 
 TEMPLATES = {
     "basic": {
@@ -53,7 +61,7 @@ def create_project(project_name, base_dir, template="basic", config_file=None,
     # Load configuration
     config = TEMPLATES[template]
     if config_file:
-        with open(config_file) as f:
+        with open(config_file, encoding='utf-8') as f:
             custom_config = yaml.safe_load(f)
         config = merge_configs(config, custom_config)
 
@@ -152,7 +160,7 @@ def main():
 
 def add_requirements(project_path, packages):
     req_file = project_path / "requirements.txt"
-    with req_file.open("a") as f:
+    with req_file.open("a", encoding='utf-8') as f:
         f.write("\n".join(packages) + "\n")
 
 if __name__ == "__main__":

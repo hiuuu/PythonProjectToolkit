@@ -186,6 +186,7 @@ Example:
             "# Project analysis outputs",
             "project_summary_*.txt",
             "undocumented_code_*.txt",
+            "*.exe",
             "backups/"
         ]
 
