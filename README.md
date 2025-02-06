@@ -1,4 +1,3 @@
----
 
 # **Python Project Toolkit**
 
@@ -188,7 +187,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## **Acknowledgments**
 
-- Built with ❤️ by [Your Name].
+- Built with ❤️ by Hamed Zandieh (hamed.zandieh@gmail.com).
 - Inspired by the need for better project documentation and scaffolding tools.
 - Special thanks to the Python community for amazing libraries and tools.
 
@@ -196,7 +195,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## **Support**
 
-For questions, issues, or feature requests, please [open an issue](https://github.com/yourusername/python-project-toolkit/issues).
+For questions, issues, or feature requests, please [open an issue](https://github.com/hiuuu/EfficientCoding/issues).
 
----
+
 
