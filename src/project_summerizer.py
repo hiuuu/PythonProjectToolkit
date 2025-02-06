@@ -19,7 +19,7 @@ logging.basicConfig(
     handlers=[logging.StreamHandler(sys.stdout)]
 )
 
-class ProjectAnalyzer:
+class ProjectSummerizer:
     """Main analysis engine with enhanced path handling and error checking"""
     
     def __init__(self, root_dir: Path, output_dir: Path):
@@ -225,7 +225,7 @@ def main():
         logging.getLogger().setLevel(logging.DEBUG)
 
     try:
-        analyzer = ProjectAnalyzer(args.project_root, args.output_dir)
+        analyzer = ProjectSummerizer(args.project_root, args.output_dir)
         analyzer.load_gitignore_patterns()
 
         summary_file = args.summary_file or analyzer.output_dir / f"project_summary_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
